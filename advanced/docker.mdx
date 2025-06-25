@@ -214,6 +214,69 @@ docker run -d \
   --code <your-worker-code>
 ```
 
+### Docker Compose Configuration
+
+For easier management of multiple containers, you can use Docker Compose. This is particularly useful when running multiple GPU instances or managing complex deployments.
+
+Create a `docker-compose.yml` file:
+
+```yaml
+services:
+  instance-0:
+    image: inferencedevnet/amd64-nvidia-inference-node:latest
+    command: --code <registry-code>
+    restart: always
+    environment:
+      CONFIG_DIR: /root/.inference
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ["0"]
+              capabilities: [gpu]
+    volumes:
+      - /root:/root/.inference
+
+  instance-1:
+    image: inferencedevnet/amd64-nvidia-inference-node:latest
+    command: --code <registry-code>
+    restart: always
+    environment:
+      CONFIG_DIR: /root/.inference
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ["1"]
+              capabilities: [gpu]
+    volumes:
+      - /root:/root/.inference
+```
+
+To deploy with Docker Compose:
+
+```bash
+# Start all services
+docker-compose up -d
+
+# View logs for all services
+docker-compose logs -f
+
+# Stop all services
+docker-compose down
+
+# Restart a specific instance
+docker-compose restart instance-0
+```
+
+This configuration automatically handles:
+- GPU device assignment for each container
+- Persistent volume mounting for configuration
+- Automatic restart on failure
+- Proper environment variable setup
+
 ## Troubleshooting
 
 ### Container Startup Issues
