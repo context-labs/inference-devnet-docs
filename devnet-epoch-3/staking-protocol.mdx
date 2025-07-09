@@ -31,8 +31,9 @@ Operator pools are the fundamental unit of the staking system. Each GPU operator
 - Tracks performance metrics and reward distribution
 - Sets economic parameters like commission rates
 - Receives stake-weighted job allocations
+- Manages USDC revenue sharing with delegators
 
-Operators must maintain a specific minimum stake of their pool's total stake to ensure network economic security.
+Operators must maintain a specific minimum stake amount to ensure network economic security. Each wallet can create at most one operator pool.
 
 ### Staking Records
 
@@ -161,9 +162,17 @@ Operators set commission rates (0-100%) that determine their share of epoch rewa
 
 In addition to token rewards, operators earn USDC from processing inference jobs:
 
-- USDC payments go directly to the operator's designated payout wallet
-- This revenue stream is separate from token rewards
-- Delegators do not receive a share of USDC revenue
+- Operators can set a USDC commission rate (0-100%) separate from token reward commission
+- USDC revenue is shared proportionally among all pool participants based on their stake
+- Shared USDC accrues on-chain when rewards are distributed to the pool
+- Delegators earn their proportional share of USDC revenue after operator commission
+- All USDC earnings (operator commission and staked share) can be withdrawn at any time without affecting stake
+
+<Note>
+  USDC revenue sharing allows delegators to participate in the network's revenue
+  stream, not just token rewards. This creates stronger economic alignment
+  between operators and delegators.
+</Note>
 
 ## Staking and Unstaking Mechanics
 
@@ -188,7 +197,17 @@ In addition to token rewards, operators earn USDC from processing inference jobs
 
 ### Pool Closure
 
-Operators may close a pool at their discretion. Pool closure is a permanent action and cannot be undone. If a pool has been closed, any remaining stake or commission fees can still be withdrawn.
+Operators may close a pool at their discretion. Pool closure is a permanent action and cannot be undone. If a pool has been closed, any remaining stake, commission fees, and accrued USDC can still be withdrawn.
+
+### Pool Creation Requirements
+
+Creating an operator pool requires:
+
+- **Registration Fee**: A one-time fee paid in $INT-DEV tokens to prevent spam and bad actor activity
+- **Minimum Stake**: Operators must stake a minimum amount before delegations are accepted
+- **Unique Wallet**: Each wallet can create at most one operator pool
+
+The registration fee and minimum stake requirements are set globally by the protocol authorities.
 
 ## Security Features
 
@@ -264,13 +283,13 @@ A: Yes. Cancelling an unstake operation will immediately re-stake the tokens and
 A: Commission rate changes take effect in the epoch following when the change occurred, once all reward claims for that pool have been completed.
 
 **Q: What's the difference between token rewards and USDC revenue?**<br/>
-A: Token rewards ($INT) are distributed to all pools by the protocol and shared between operators and delegators. USDC revenue is paid directly to the operators for completed inference tasks.
+A: Token rewards ($INT) are distributed to all pools by the protocol and shared between operators and delegators based on token commission rate. USDC revenue is earned by operators for completed inference tasks and can be shared with delegators based on USDC commission rate. Both types of earnings are distributed proportionally to stake, after their respective commission rates.
 
 **Q: Can operators change minimum stake requirements?**<br/>
-A: No. The operator minimum stake requirement is set globally and applies to all operator pools.
+A: No. The operator minimum stake amount is set globally and applies to all operator pools.
 
 **Q: What if an operator falls below the minimum stake threshold?**<br/>
-A: They can't reduce stake further and the pool can't accept new delegations until the ratio is restored.
+A: They can't reduce stake further and the pool can't accept new delegations until the minimum stake amount is restored.
 
 **Q: Are there fees for staking/unstaking?**<br/>
 A: No. The protocol does not charge fees for any transactions. Only standard Solana transaction fees apply.
@@ -286,5 +305,14 @@ A: Operator are halted for suspected network violations. Halting prevents specif
 
 **Q: How does slashing work?**<br/>
 A: Authorities can permanently remove operator tokens for serious violations. Only operator stake is at risk, delegator tokens are protected from slashing.
+
+**Q: How do USDC withdrawals work?**<br/>
+A: USDC earnings accrue on-chain when rewards are distributed. Both operators and delegators can withdraw their accrued USDC at any time without affecting their stake or earning potential.
+
+**Q: Can I create multiple operator pools?**<br/>
+A: No. Each wallet can create at most one operator pool to ensure fair participation and prevent gaming of the system.
+
+**Q: What happens to the registration fee?**<br/>
+A: The registration fee is paid to the protocol and helps prevent spam or malicious pool creation.
 
 For support, join our [Discord](https://discord.gg/kuzco) community.

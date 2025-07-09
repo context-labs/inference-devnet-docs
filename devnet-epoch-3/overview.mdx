@@ -130,11 +130,12 @@ The Inference.net staking protocol is implemented as a Solana program using the 
 
 Each operator can create a staking pool with the following configurable parameters:
 
-- **Commission Rate**: Percentage of epoch rewards retained by the operator (0-100%)
+- **Reward Commission Rate**: Percentage of epoch rewards retained by the operator (0-100%)
+- **USDC Commission Rate**: Percentage of USDC revenue retained by the operator (0-100%)
 - **Delegation Status**: Whether to accept external delegations
-- **Minimum Self-Stake**: Currently set globally at 10% of total pool stake
+- **Minimum Self-Stake**: Operators must maintain a globally-set minimum stake amount
 
-Operators must maintain the minimum self-stake ratio to ensure alignment between pool performance and operator incentives. If delegations cause the self-stake ratio to fall below 10%, the operator must add additional stake.
+Operators must maintain the minimum stake amount to ensure alignment between pool performance and operator incentives. Pool creation requires a one-time registration fee and each wallet can create at most one operator pool.
 
 ### Delegation Mechanics
 
@@ -169,8 +170,14 @@ During Epoch 3, operators will interact with two distinct reward mechanisms:
 - Distributed for testing purposes via airdrop and reward distributions
 - Based on stake-weighted job completion
 - Required for staking to receive job allocations
+- Used for pool creation registration fees
 
-This dual approach allows us to test the on-chain protocol's economic mechanisms while maintaining flexibility in reward distribution during the development phase.
+### USDC Revenue Sharing
+
+- Operators earn USDC for processing inference jobs
+- Operators can share USDC revenue with delegators by setting a USDC commission rate
+- Delegators receive proportional USDC earnings based on their stake
+- USDC accrues on-chain and can be withdrawn without affecting stake
 
 <Warning>
   The Inference.net Staking Protocol is being tested on Solana Devnet with test

@@ -17,8 +17,9 @@ When you delegate tokens to an operator pool:
 
 1. Your tokens help increase the operator's priority for receiving inference jobs
 2. You earn a proportional share of the pool's token rewards
-3. The operator takes a commission fee from rewards before distribution
-4. Your tokens remain yours - operators cannot access delegated tokens
+3. You earn a proportional share of the pool's USDC revenue (if operator enables revenue sharing)
+4. The operator takes commission fees from both rewards and USDC before distribution
+5. Your tokens remain yours - operators cannot access delegated tokens
 
 <Note>
   Delegated tokens are not at risk of slashing. Only operator stakes can be
@@ -59,7 +60,8 @@ Navigate to the **Operators** page to view all available pools. Key metrics to c
 
 **Economic Terms:**
 
-- **Commission Rate**: Percentage of rewards kept by operator
+- **Commission Rate**: Percentage of token rewards kept by operator
+- **USDC Commission Rate**: Percentage of USDC revenue kept by operator
 - **Delegation Allowed**: Whether the pool accepts external stake
 - **Auto Stake Fees**: If commission is automatically compounded
 
@@ -67,8 +69,8 @@ Navigate to the **Operators** page to view all available pools. Key metrics to c
 
 Consider these factors when choosing an operator:
 
-1. **Stake Ratio**: Operators must maintain ≥10% of total pool stake
-2. **Commission Rate**: Lower rates mean higher delegator rewards
+1. **Stake Ratio**: Operators must maintain their minimum stake amount
+2. **Commission Rates**: Lower rates mean higher delegator rewards (check both token and USDC rates)
 3. **Track Record**: View historical performance in the operator details
 4. **Hardware**: GPUs with higher VRAM typically process more jobs
 5. **Communication**: Active operators often have websites or community presence
@@ -106,11 +108,13 @@ View your delegations in two places:
 - Shows all pools where you have active stake
 - Displays your stake amount and current value
 - Shows pending unstaking amounts
+- Displays accrued USDC earnings
 
 **Individual Pool Pages:**
 
 - Your specific stake in that pool
-- Accumulated rewards
+- Accumulated token rewards
+- Accumulated USDC earnings
 - Share percentage of the pool
 
 ## Managing Delegations
@@ -142,11 +146,24 @@ Unstaking requires a cooldown period:
 
 ### Claiming Rewards
 
-Rewards are distributed automatically during the unstaking process. When you unstake and withdraw:
+Token rewards are distributed automatically during the unstaking process. When you unstake and withdraw:
 
 - Your original stake is returned
-- Accumulated rewards are included
+- Accumulated token rewards are included
 - No separate claim transaction is needed
+
+### Withdrawing USDC Earnings
+
+USDC earnings can be withdrawn at any time without affecting your stake:
+
+1. Navigate to the operator pool or your portfolio
+2. Click **Withdraw USDC**
+3. Confirm the transaction to receive your accrued USDC
+
+<Note>
+  USDC withdrawals do not affect your stake or future earning potential. You can
+  withdraw USDC as often as you like.
+</Note>
 
 ## Choosing Operators Wisely
 
@@ -160,8 +177,8 @@ Rewards are distributed automatically during the unstaking process. When you uns
 
 ### Red Flags
 
-- ❌ Operator stake near minimum (exactly 10%)
-- ❌ Very high commission rates (>50%)
+- ❌ Operator stake near minimum (exactly at minimum threshold)
+- ❌ Very high commission rates (>50% for tokens or USDC)
 - ❌ Pool marked as "Halted"
 - ❌ No website or contact information
 - ❌ Frequent configuration changes
@@ -173,7 +190,8 @@ While delegation is generally safe, consider:
 1. **Opportunity Cost**: Tokens are locked during staking and cooldown
 2. **Variable Returns**: Rewards depend on operator performance
 3. **Commission Changes**: Operators can adjust rates (effective next epoch)
-4. **Pool Closure**: Operators may close pools, stopping rewards for all delegators
+4. **Pool Closure**: Operators may close pools, stopping rewards and USDC earnings
+5. **USDC Revenue Variability**: USDC earnings depend on inference job volume
 
 <Note>
   Remember: $INT-DEV tokens are testnet tokens with no monetary value. They
@@ -187,5 +205,22 @@ While delegation is generally safe, consider:
 1. **Diversify**: Spread stake across multiple high-performing operators
 2. **Monitor Performance**: Regularly check operator metrics and adjust
 3. **Consider Pool Size**: Smaller pools may offer growth potential
-4. **Watch Commission**: Lower isn't always better - consider operator quality
+4. **Watch Commissions**: Compare both token and USDC commission rates
 5. **Stay Informed**: Follow operator updates and network announcements
+6. **Withdraw USDC Regularly**: Claim your USDC earnings periodically
+
+## Frequently Asked Questions
+
+**Q: How do I earn USDC as a delegator?**<br/>
+A: When operators process inference jobs, they earn USDC. If they've enabled USDC revenue sharing (by setting a commission rate less than 100%), you'll earn a proportional share based on your stake in the pool.
+
+**Q: When can I withdraw my USDC earnings?**<br/>
+A: You can withdraw accrued USDC at any time without affecting your stake or unstaking your tokens.
+
+**Q: Do all operators share USDC revenue?**<br/>
+A: No. Operators can choose their USDC commission rate. A 100% rate means no sharing, while lower rates mean more USDC for delegators.
+
+**Q: How are USDC earnings calculated?**<br/>
+A: Your share of USDC equals: (Your stake / Total pool stake) × USDC revenue × (1 - USDC commission rate)
+
+For additional support, join our [Discord](https://discord.gg/kuzco) community.

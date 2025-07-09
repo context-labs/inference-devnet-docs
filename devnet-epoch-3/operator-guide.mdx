@@ -17,9 +17,11 @@ Before setting up your operator pool:
 
 1. Ensure you have a funded Solana wallet with:
    - Some SOL for transaction fees
-   - $INT-DEV tokens from the airdrop or faucet
+   - $INT-DEV tokens for the registration fee and initial stake
 2. Link your Solana wallet to your Inference.net account
 3. Have your GPU node running and connected to the network
+
+<Note>Each wallet can create only one operator pool.</Note>
 
 ## Creating Your Operator Pool
 
@@ -48,17 +50,19 @@ An operator pool is your on-chain identity that manages stake, receives job allo
 
 1. Navigate to **Dashboard → Staking → Overview**
 2. Click **Create Operator Pool**
-3. Follow the steps to create your operator pool.
+3. Review the registration fee requirement (paid in $INT-DEV tokens)
+4. Follow the steps to create your operator pool:
 
    **Economic Settings:**
 
-   - **Commission Rate**: Percentage of rewards you keep (0-100%)
+   - **Token Commission Rate**: Percentage of token rewards you keep (0-100%)
+   - **USDC Commission Rate**: Percentage of USDC revenue you keep (0-100%)
    - **Allow Delegation**: Whether to accept stake from other token holders
    - **Auto Stake Fees**: Automatically compound commission into your stake
 
    **Payout Settings:**
 
-   - **USDC Payout Wallet**: Where to receive USDC revenue from inference jobs
+   - **USDC Payout Wallet**: Where to receive USDC commission and your share of revenue
 
    **Profile Information:**
 
@@ -66,26 +70,28 @@ An operator pool is your on-chain identity that manages stake, receives job allo
    - **Website URL**: Optional link to your website
    - **Description**: Brief description of your operation
 
-4. Review your settings and click **Create Pool**
-5. Approve the transaction in your wallet
+5. Review your settings and the registration fee
+6. Click **Create Pool** and approve the transaction in your wallet
 
 <Warning>
-  Pool creation requires a small amount of SOL for transaction fees. Ensure your
-  wallet has sufficient SOL balance.
+  Pool creation requires: - A registration fee in $INT-DEV tokens
+  (non-refundable) - Sufficient SOL for transaction fees - This wallet has not
+  created a pool before
 </Warning>
 
 ### Step 3: Stake Your Pool
 
-As an operator, you must maintain at least 10% of your pool's total stake. This ensures alignment between your performance and delegator rewards.
+Operators must stake a minimum amount (set globally by the protocol) before their pool can accept delegations. This ensures proper economic alignment.
 
 1. On your pool overview page, click **Stake**
-2. Enter the amount of $INT-DEV to stake
+2. Enter at least the minimum required amount of $INT-DEV
 3. Review the transaction and click **Confirm Stake**
 4. Approve the transaction in your wallet
 
 <Info>
-  The more you stake, the higher your priority for receiving inference jobs.
-  Your effective stake per GPU is normalized by VRAM capacity.
+  Until you meet the minimum stake requirement, your pool cannot accept
+  delegations from other users. The more you stake beyond the minimum, the
+  higher your priority for receiving inference jobs.
 </Info>
 
 ## Managing Your Pool
@@ -95,9 +101,10 @@ As an operator, you must maintain at least 10% of your pool's total stake. This 
 Your operator dashboard displays key metrics:
 
 - **Total Pool Stake**: Combined operator and delegator stake
-- **Operator Stake**: Your personal stake (must remain ≥10% of total)
-- **Commission Earned**: Accumulated fees from rewards
-- **USDC Revenue**: Earnings from completed inference jobs
+- **Operator Stake**: Your personal stake (must remain above minimum)
+- **Token Commission Earned**: Accumulated fees from token rewards
+- **USDC Commission Earned**: Accumulated fees from USDC revenue
+- **USDC Revenue Share**: Your proportional share of USDC revenue
 - **Total Delegators**: Number of external stakers
 
 ### Adjusting Settings
@@ -106,19 +113,31 @@ You can modify certain pool parameters after creation:
 
 1. Navigate to **Dashboard → Staking → Settings**
 2. Update available settings:
-   - Commission rate (changes apply next epoch)
+   - Token commission rate (changes apply next epoch when rewards are claimed for your pool)
+   - USDC commission rate (changes apply next epoch when rewards are claimed for your pool)
    - Allow/disallow delegations
    - Auto-stake preferences
    - Profile information
    - USDC payout destination
 
+<Note>
+  Setting USDC commission below 100% enables revenue sharing with delegators,
+  which can attract more stake to your pool.
+</Note>
+
 ### Withdrawing Rewards
 
-**Commission Fees:**
+**Commission Fees (Token & USDC):**
 
-- If auto-stake is disabled, commission accumulates separately
-- Click **Withdraw Commission** to claim accumulated fees
-- Specify a destination wallet or use your connected wallet
+- Both token and USDC commissions accrue on-chain
+- Click **Withdraw Token Commission** or **Withdraw USDC Commission**
+- Commissions are sent to your designated wallets
+
+**USDC Revenue Share:**
+
+- As an operator, you also earn a proportional share of USDC revenue
+- This is separate from your commission and based on your stake in the pool
+- Click **Withdraw USDC Earnings** to claim your revenue share
 
 **Unstaking Process:**
 
@@ -142,10 +161,11 @@ You can modify certain pool parameters after creation:
 
 ## Best Practices
 
-1. **Maintain Adequate Stake**: Keep your operator stake well above the 10% minimum to accommodate delegator growth
-2. **Set Competitive Commission**: Balance earning potential with attractiveness to delegators
-3. **Monitor Hardware**: Ensure your GPUs maintain high uptime for better reputation scores
-4. **Engage Delegators**: Provide clear communication about your operation and performance
+1. **Meet Minimum Requirements**: Ensure you maintain stake above the global minimum to keep accepting delegations
+2. **Set Competitive Commissions**: Balance earning potential with attractiveness to delegators for both token and USDC rates
+3. **Consider Revenue Sharing**: Lower USDC commission rates can attract more delegators
+4. **Monitor Hardware**: Ensure your GPUs maintain high uptime for better reputation scores
+5. **Engage Delegators**: Provide clear communication about your operation and performance
 
 ## Troubleshooting
 
@@ -157,9 +177,17 @@ You can modify certain pool parameters after creation:
 
 **Cannot Create Pool:**
 
-- Verify wallet has sufficient SOL for fees
+- Verify wallet has sufficient $INT-DEV for registration fee
+- Ensure wallet has sufficient SOL for transaction fees
+- Check that this wallet hasn't already created a pool
 - Ensure wallet is properly linked to your account
-- Check that pool creation is currently enabled
+- Verify pool creation is currently enabled
+
+**Cannot Accept Delegations:**
+
+- Ensure you've staked at least the minimum required amount
+- Check that delegations are enabled in your pool settings
+- Verify your pool is not halted
 
 **Stake Transaction Fails:**
 
