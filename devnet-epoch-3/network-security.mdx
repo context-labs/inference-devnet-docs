@@ -1,0 +1,185 @@
+---
+title: "Network Security"
+description: "Understanding halting and slashing mechanisms in the Inference.net staking protocol"
+---
+
+The Inference.net staking protocol ensure network security through staking and slashing mechanisms.
+
+<Warning>
+  The Inference.net Staking Protocol is being tested on Solana Devnet with test
+  tokens. These tokens have no monetary value and should not be used for
+  real-world transactions or bought or sold by anyone.
+</Warning>
+
+## Security Overview
+
+To maintain network reliability and prevent malicious behavior, the protocol supports two primary security mechanisms:
+
+1. **Halting**: Temporary suspension of certain actions to allow investigation
+2. **Slashing**: Permanent penalty for severe violations, affecting only operator stake
+
+These tools are controlled by designated authorities and include safeguards to protect delegators.
+
+<Note>
+  Delegated tokens are always protected from slashing. Only an operator's own
+  stake can be penalized for violations.
+</Note>
+
+## Halting Mechanism
+
+Halting allows authorities to temporarily restrict actions while investigating potential issues. This prevents further harm without permanent penalties.
+
+### Types of Halts
+
+1. **Global Halts**
+
+   - Controlled via the `PoolOverview` account
+   - Can halt:
+     - All staking operations (`is_staking_halted`)
+     - All withdrawals/unstaking (`is_withdrawal_halted`)
+     - Reward accruals (`is_accrue_reward_halted`)
+     - New pool creation (`allow_pool_creation`)
+   - Used for network-wide emergencies or maintenance
+
+2. **Pool-Specific Halts**
+   - Sets `halted_at` timestamp on individual OperatorPool
+   - Restricts operator actions like:
+     - Staking/unstaking
+     - Claiming rewards
+     - Withdrawing commissions
+     - Closing the pool
+   - Delegators can still unstake and withdraw their funds
+   - Initiated by program halt authorities
+
+### Halt Process
+
+- Halt authorities invoke `set_halt_status` instruction
+- For pool halts, sets current timestamp as `halted_at`
+- Halts can be reversed by setting `halted_at` to None
+- Used to freeze suspicious pools during investigation
+
+## Slashing Mechanism
+
+Slashing is a permanent penalty for confirmed violations, designed to economically disincentivize malicious behavior.
+
+### What Gets Slashed
+
+- Only the operator's self-stake (from their staking record)
+- Accrued but unclaimed:
+  - Token commissions
+  - USDC commissions
+  - USDC earnings
+- Delegated tokens are never slashed
+
+### Slashing Process
+
+1. **Prerequisite: Pool Must Be Halted**
+
+   - Pool must already be halted
+   - Minimum delay period must elapse (at least 1 day, configurable via `slashing_delay_seconds`)
+
+2. **Invocation**
+
+   - Slashing authorities call `slash_stake` instruction
+   - Specify amount of shares to slash
+   - Settles any pending USDC earnings first
+
+3. **Effects**
+
+   - Reduces operator's shares and corresponding tokens
+   - Confiscates all pending commissions and USDC
+   - Transfers slashed assets to designated protocol accounts
+   - Emits `SlashStakeEvent` with details
+
+4. **Destination**
+
+   - Slashed tokens go to `slashing_destination_token_account`
+   - Slashed USDC goes to `slashing_destination_usdc_account`
+
+<Warning>
+  Slashing is irreversible. Authorities follow strict protocols and evidence
+  requirements before invoking slashes.
+</Warning>
+
+### Violation Examples
+
+Potential reasons for halting/slashing include:
+
+- Malicious job processing
+- Network attacks or spam
+- Protocol violations
+- Hardware misrepresentation
+
+## Authorities and Controls
+
+Security operations are managed by separate authority sets to distribute power:
+
+- **Halt Authorities** (`halt_authorities`): Can halt/unhalt pools
+- **Slashing Authorities** (`slashing_authorities`): Can execute slashes on halted pools
+- **Program Admin**: Can update authority lists and global settings
+
+## Protections for Participants
+
+The protocol includes several safeguards:
+
+1. **Delegator Protection**
+
+   - Delegated tokens immune to slashing
+   - Can always unstake from halted pools
+   - Protected from operator misconduct
+
+2. **Delay Periods**
+
+   - Minimum 1-day delay between halt and slash
+   - Configurable via `slashing_delay_seconds`
+   - Allows time for appeals/investigation
+
+3. **Transparency**
+
+   - All halts and slashes emit events
+   - On-chain timestamps track actions
+   - Public authority keys
+
+4. **Reversibility**
+   - Halts can be lifted
+   - Global halts are temporary controls
+
+## Best Practices for Operators
+
+To avoid security actions:
+
+- Maintain honest job processing
+- Ensure high uptime and performance
+- Follow all protocol rules
+- Monitor your pool status
+- Respond promptly to any warnings
+- Keep your hardware secure
+
+If your pool is halted:
+
+- Contact support immediately
+- Provide any requested evidence
+- Do not attempt restricted actions
+- Delegators can still withdraw
+
+## FAQ
+
+**Q: Can delegators lose funds from slashing?**<br/>
+A: No. Only operator self-stake is at risk. Delegators are fully protected.
+
+**Q: How long after halting can slashing occur?**<br/>
+A: At least 1 day (86,400 seconds), configurable but never less than minimum.
+
+**Q: Who controls the authorities?**<br/>
+A: Authority keys are managed by Inference.net governance. Lists are public and on-chain.
+
+**Q: What happens to slashed funds?**<br/>
+A: Transferred to protocol-controlled accounts to fund network security initiatives.
+
+**Q: Can I unstake from a halted pool?**<br/>
+A: Delegators can unstake from a halted pool, but operators cannot.
+
+**Q: How are violations detected?**<br/>
+A: Through inference and network verification mechanisms.
+
+For questions or concerns about network security, join our [Discord](https://discord.gg/kuzco) community.

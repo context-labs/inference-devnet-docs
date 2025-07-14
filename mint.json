@@ -61,7 +61,8 @@
         "devnet-epoch-3/airdrop",
         "devnet-epoch-3/staking-protocol",
         "devnet-epoch-3/operator-guide",
-        "devnet-epoch-3/delegator-guide"
+        "devnet-epoch-3/delegator-guide",
+        "devnet-epoch-3/network-security"
       ]
     },
     {
