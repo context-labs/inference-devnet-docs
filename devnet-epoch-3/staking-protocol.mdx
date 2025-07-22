@@ -1,5 +1,5 @@
 ---
-title: "Staking Program"
+title: "Staking Protocol"
 description: "Understanding how the Inference.net staking protocol works"
 ---
 
@@ -143,6 +143,8 @@ The protocol operates on an epoch system where rewards are distributed periodica
 3. **Operator Claims**: Each operator claims their pool's rewards using merkle proofs
 4. **Automatic Distribution**: Rewards are split between operators (commission) and delegators
 
+The epoch reward emissions scheduled is encoded and enforced in our program when epochs are finalized. You can view the [reward emissions schedule here](https://github.com/context-labs/inference-staking/blob/main/programs/inference-staking/src/emissions.rs).
+
 <Note>
   Pool reward claims are permissionless and can be submitted by anyone. Pool
   reward claims must be processed sequentially from oldest to most recent. All
@@ -213,24 +215,7 @@ The registration fee and minimum stake requirements are set globally by the prot
 
 The staking protocol supports halting and slashing of operator pools for any identified network or protocol violations. This establishes economic incentive alignment for operators to ensure network integrity.
 
-<Warning>
-  Operators may be halted or slashed for any network or protocol violations.
-</Warning>
-
-### Halt Mechanisms
-
-The protocol includes multiple halt controls for emergency situations:
-
-- **Global Staking Halt**: Prevents all new stakes
-- **Global Withdrawal Halt**: Prevents all unstaking and claims
-- **Global Pool Creation Halt**: Prevents new pools from being created
-- **Pool-Specific Halt**: Individual pools can be halted by authorities
-
-### Slashing Protection
-
-- Only operator self-stake can be slashed for violations
-- Delegated tokens are protected from slashing
-- Slashing requires authorization from designated authorities
+For more details, see the [Network Security](/devnet-epoch-3/network-security) page.
 
 ### Program Authorities
 
