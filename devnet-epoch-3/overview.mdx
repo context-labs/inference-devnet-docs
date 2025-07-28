@@ -178,33 +178,6 @@ During Epoch 3, operators will interact with two distinct reward mechanisms:
   real-world transactions or bought or sold by anyone.
 </Warning>
 
-## Reputation System (Coming Later in Epoch 3)
-
-While stake-weighted routing launches on June 13th, the reputation system will be enabled later in Epoch 3 after validating the base routing mechanism. The reputation score will incorporate:
-
-### Completion Score
-
-Operators are grouped into performance tiers based on successful request completion rates over a rolling multi-day window:
-
-- Tier 1 (>99.5% completion): 1.0 multiplier
-- Tier 2 (98-99.5% completion): 0.9 multiplier
-- Tier 3 (96-98% completion): 0.8 multiplier
-- And so forth...
-
-### Throughput Score
-
-Performance buckets based on tokens per second relative to model-specific benchmarks:
-
-- Benchmarks are set per model and GPU type
-- Operators meeting or exceeding benchmarks receive full score
-- Below-benchmark performance results in proportional score reduction
-
-### Penalty System
-
-- First offense: 1-hour timeout from job routing
-- Repeated offenses: Extended timeouts up to permanent suspension
-- Penalties affect both routing priority and reward eligibility
-
 ## Long-term Implications
 
 The architectural changes in Epoch 3 establish the foundation for Inference.net's evolution from a points-based test network to a fully decentralized, economically sustainable inference protocol. The stake-weighted routing system creates a market mechanism for quality assurance, while the delegation system enables broader participation beyond hardware operators.
