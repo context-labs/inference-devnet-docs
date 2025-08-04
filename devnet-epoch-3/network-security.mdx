@@ -13,6 +13,12 @@ description: "Understanding halting and slashing mechanisms in the Inference.net
 
 We employ various internal inference verification mechanisms to ensure honest behavior among all GPU operators. Some of these scores are surfaced to users through our dashboards as Verification Scores. GPU operators who fail inference verification checks, or who are identified by other security mechanisms, may be halted or slashed.
 
+<Note>
+  Inference verifications are currently only produced by workers running Docker
+  ([see instructions here](/advanced/docker)). This may become required in the
+  future.
+</Note>
+
 ## Protocol Security Features
 
 To maintain network reliability and prevent malicious behavior, the protocol supports two primary security mechanisms:
