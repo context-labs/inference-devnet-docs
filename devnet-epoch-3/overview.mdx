@@ -107,6 +107,59 @@ Since operators manage varying numbers of GPUs with different VRAM capacities, t
 
 Despite equal stake, Operator A's individual 4090s each receive: 100,000 × (24/96) = 25,000 effective stake per device, while Operator B's A100 receives the full 100,000 stake allocation.
 
+## Reputation Scoring System
+
+We employ a reputation system to evaluate GPU operator quality and determine job routing and rewards. Reputation combines three components: **Verification**, **Uptime**, and **Reliability**. Together, these reflect integrity, availability, and request completion performance and allow pool delegators to make more informed delegation decisions.
+
+### Verification Score
+
+Determines operator honesty and is used to determine job routing.
+
+- We use a proprietary inference verification system to ensure that operators are running inference jobs honesty.
+- This system runs pass/fail verifications on all processed requests.
+- A score is computed based on a rolling window of verifications and operators are promoted/demoted from our trusted lane based on a verification failure threshold.
+
+**Verification Guidelines**
+
+New workers are placed in the evaluation lane and receive test traffic to build trust. This traffic does not earn rewards/points. Once a worker has passed a specific number of verifications, they are promoted to the trusted lane and begin receiving verified inference traffic.
+
+If a trusted worker begins failing too many verifications, they can be moved back to the evaluation lane until performance improves.
+
+**Verification Thresholds**
+
+Note that these thresholds may be adjusted over time. The following are an example:
+
+- **Promotion**: Untrusted operators with ≤5 failures in their last 500 verifications are promoted to the trusted lane.
+- **Demotion**: Trusted operators with ≥10 failures in their last 500 verifications are demoted to the evaluation lane.
+
+<Warning>
+  Operators that consistently fail verifications may be halted and slashed,
+  according to the [network security
+  guidelines](/devnet-epoch-3/network-security).
+</Warning>
+
+### Reliability Score
+
+Captures how consistently requests complete successfully and on time.
+
+- Inference request completion rates are measured over a fast and slow window and combined into a single score.
+- The score calculation uses a weighted average of the fast and slow window scores, e.g. 0.5 for fast (1 hour) and 0.5 for slow (72 hours).
+- Scores are recomputed for all operators hourly.
+
+### Uptime Score
+
+Measures how consistently instances are online and responsive.
+
+- The network periodically checks whether instances are by sending a health check inference request to the instance.
+- If the instance completes the request, it is considered online for the interval.
+- If the instance does not complete the request, it is considered offline for the interval.
+- To prevent gaming, checks begin only after an instance has been running for a short buffer period following startup.
+
+<Tip>
+  Uptime scores are incorporated into network reward emission calculations to
+  allow us to incentive specific types of hardware to join the network.
+</Tip>
+
 ## Solana-Based Staking Protocol
 
 ### Technical Implementation
