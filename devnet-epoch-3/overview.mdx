@@ -150,14 +150,16 @@ Captures how consistently requests complete successfully and on time.
 
 Measures how consistently instances are online and responsive.
 
-- The network periodically checks whether instances are by sending a health check inference request to the instance.
+- The network periodically checks whether instances are online by sending a health check inference request to the instance.
 - If the instance completes the request, it is considered online for the interval.
 - If the instance does not complete the request, it is considered offline for the interval.
 - To prevent gaming, checks begin only after an instance has been running for a short buffer period following startup.
 
 <Tip>
   Uptime scores are incorporated into network reward emission calculations to
-  allow us to incentive specific types of hardware to join the network.
+  allow us to incentive specific types of hardware to join the network. Rewards
+  are normalized across all operators by the number of points earned. More
+  hardware means more points, and more points means more rewards.
 </Tip>
 
 ## Solana-Based Staking Protocol
